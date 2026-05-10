@@ -10,6 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GenerationConfigDTO {
-    MaxOutputDto maxOutputTokens;
-    TemperatureDto temperature;
+    Integer maxOutputTokens;
+    Double temperature;
 }

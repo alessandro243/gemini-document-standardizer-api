@@ -14,5 +14,5 @@ import java.util.Map;
 @AllArgsConstructor
 public class GeminiRequestDTO {
     List<ContentDto> contents;
-
+    GenerationConfigDTO generationConfig;
 }
