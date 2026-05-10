@@ -15,8 +15,8 @@ import java.util.List;
 
 @org.springframework.stereotype.Service
 public class Service {
-    String url =
-            "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=";
+    @Value("${gemini.api.url}")
+    String url;
 
     @Value("${gemini.api.key}")
     String key;

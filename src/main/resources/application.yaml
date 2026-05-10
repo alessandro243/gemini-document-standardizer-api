@@ -22,5 +22,5 @@ spring:
 
 gemini:
   api:
-    url: https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent
+    url: https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=
     key: ${GEMINI_API_KEY}
