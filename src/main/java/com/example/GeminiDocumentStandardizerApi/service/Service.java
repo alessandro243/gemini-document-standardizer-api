@@ -29,10 +29,10 @@ public class Service {
         this.restClient = RestClientConfig.rest_Client();
     }
 
-    public GeminiRequestDTO requestConstructor(GeminiRequestDTO geminiRequestDTO){
+    public GeminiRequestDTO requestConstructor(GeminiRequestDTO geminiRequestDTO, String prompt){
 
         PartDto partDto = new PartDto();
-        partDto.setText("Olá");
+        partDto.setText(prompt);
 
         GenerationConfigDTO generationConfigDTO = new GenerationConfigDTO();
         generationConfigDTO.setMaxOutputTokens(100);
@@ -48,11 +48,11 @@ public class Service {
         return geminiRequestDTO;
     }
 
-    public GeminiResponseDto callGemini(GeminiRequestDTO requestDTO){
+    public GeminiResponseDto callGemini(GeminiRequestDTO requestDTO, String prompt){
         return this.restClient
                 .post()
                 .uri(url + key)
-                .body(requestConstructor(requestDTO))
+                .body(requestConstructor(requestDTO, prompt))
                 .retrieve()
                 .body(GeminiResponseDto.class);
     }

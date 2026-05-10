@@ -3,31 +3,22 @@ spring:
     name: GeminiDocumentStandardizerApi
 
   mvc:
-    locale:
-      resolver:
-        fixed
-      locale:
-        pt_BR
+    locale-resolver: fixed
+    locale: pt_BR
 
   jpa:
-    show-sql:
-      true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
     properties:
       hibernate:
-        format_sql:
-          false
-        ddl-auto:
-          update
+        format_sql: false
 
   datasource:
-    driverClassName:
-      com.mysql.cj.jdbc.Driver
-    url:
-      jdbc:mysql://localhost:3306/standardizerbank?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Sao_Paulo
-    username:
-      root
-    password:
-      root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/standardizerbank?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=America/Sao_Paulo
+    username: root
+    password: root
 
 gemini:
   api:
