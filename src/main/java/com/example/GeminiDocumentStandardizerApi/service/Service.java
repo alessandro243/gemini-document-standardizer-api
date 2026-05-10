@@ -7,6 +7,8 @@ import com.example.GeminiDocumentStandardizerApi.web.dto.requestdto.GeminiReques
 import com.example.GeminiDocumentStandardizerApi.web.dto.requestdto.GenerationConfigDTO;
 import com.example.GeminiDocumentStandardizerApi.web.dto.requestdto.PartDto;
 import com.example.GeminiDocumentStandardizerApi.web.dto.responsedto.GeminiResponseDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
@@ -15,6 +17,9 @@ import java.util.List;
 public class Service {
     String url =
             "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=";
+
+    @Value("${gemini.api.key}")
+    String key;
 
     StandardizerRepository standardizerRepository;
     private final RestClient restClient;
@@ -43,8 +48,7 @@ public class Service {
         return geminiRequestDTO;
     }
 
-    public GeminiResponseDto callGemini(GeminiRequestDTO requestDTO, String key){
-
+    public GeminiResponseDto callGemini(GeminiRequestDTO requestDTO){
         return this.restClient
                 .post()
                 .uri(url + key)

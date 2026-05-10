@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 public class Controller {
     private final Service service;
 
-    @PostMapping("/{key}")
-    public String GeminiConnector(@PathVariable String key){
-        GeminiResponseDto retorno = service.callGemini(new GeminiRequestDTO(), key);
+    @PostMapping
+    public String GeminiConnector(){
+        GeminiResponseDto retorno = service.callGemini(new GeminiRequestDTO());
         return retorno.getCandidates().getFirst().getContent().getParts().getFirst().getText();
     }
 }
