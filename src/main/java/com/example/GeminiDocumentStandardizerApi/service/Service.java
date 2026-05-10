@@ -1,25 +1,28 @@
 package com.example.GeminiDocumentStandardizerApi.service;
 
+import com.example.GeminiDocumentStandardizerApi.config.RestClientConfig;
 import com.example.GeminiDocumentStandardizerApi.repository.StandardizerRepository;
 import com.example.GeminiDocumentStandardizerApi.web.dto.*;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
 
 @org.springframework.stereotype.Service
 public class Service {
-    String apiKey = "AIzaSyBUoSrgRsy9M3WNVToxfhyYt6U1btEwI48";
     String url =
-            "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=" + apiKey;
+            "https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=";
 
     StandardizerRepository standardizerRepository;
     private final RestClient restClient;
 
-    public Service(RestClient restClient){
-        this.restClient = restClient;
+
+    public Service(){
+        this.restClient = RestClientConfig.rest_Client();
     }
 
     public GeminiRequestDTO requestConstructor(GeminiRequestDTO geminiRequestDTO){
@@ -41,13 +44,13 @@ public class Service {
         return geminiRequestDTO;
     }
 
-    public GeminiRequestDTO callGemini(GeminiRequestDTO requestDTO){
+    public String callGemini(GeminiRequestDTO requestDTO, String key){
         return this.restClient
                 .post()
-                .uri(url)
-                .body(requestDTO)
+                .uri(url + key)
+                .body(requestConstructor(requestDTO))
                 .retrieve()
-                .body(GeminiRequestDTO.class);
+                .body(String.class);
     }
 
 }
