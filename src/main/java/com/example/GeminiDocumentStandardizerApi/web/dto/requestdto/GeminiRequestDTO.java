@@ -1,9 +1,8 @@
-package com.example.GeminiDocumentStandardizerApi.web.dto;
+package com.example.GeminiDocumentStandardizerApi.web.dto.requestdto;
 
 import lombok.*;
 
 import java.util.List;
-import java.util.Map;
 
 @Setter
 @Getter

@@ -1,4 +1,4 @@
-package com.example.GeminiDocumentStandardizerApi.web.dto;
+package com.example.GeminiDocumentStandardizerApi.web.dto.requestdto;
 
 import lombok.*;
 

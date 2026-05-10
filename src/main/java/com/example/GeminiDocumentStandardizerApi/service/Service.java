@@ -2,12 +2,11 @@ package com.example.GeminiDocumentStandardizerApi.service;
 
 import com.example.GeminiDocumentStandardizerApi.config.RestClientConfig;
 import com.example.GeminiDocumentStandardizerApi.repository.StandardizerRepository;
-import com.example.GeminiDocumentStandardizerApi.web.dto.*;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import com.example.GeminiDocumentStandardizerApi.web.dto.requestdto.ContentDto;
+import com.example.GeminiDocumentStandardizerApi.web.dto.requestdto.GeminiRequestDTO;
+import com.example.GeminiDocumentStandardizerApi.web.dto.requestdto.GenerationConfigDTO;
+import com.example.GeminiDocumentStandardizerApi.web.dto.requestdto.PartDto;
+import com.example.GeminiDocumentStandardizerApi.web.dto.responsedto.GeminiResponseDto;
 import org.springframework.web.client.RestClient;
 
 import java.util.List;
@@ -44,13 +43,14 @@ public class Service {
         return geminiRequestDTO;
     }
 
-    public String callGemini(GeminiRequestDTO requestDTO, String key){
+    public GeminiResponseDto callGemini(GeminiRequestDTO requestDTO, String key){
+
         return this.restClient
                 .post()
                 .uri(url + key)
                 .body(requestConstructor(requestDTO))
                 .retrieve()
-                .body(String.class);
+                .body(GeminiResponseDto.class);
     }
 
 }
