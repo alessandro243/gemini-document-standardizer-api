@@ -1,7 +1,7 @@
-package com.example.GeminiDocumentStandardizerApi;
+package dev.alex.standardizer;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.SpringApplication;
 
 @SpringBootApplication
 public class GeminiDocumentStandardizerApiApplication {

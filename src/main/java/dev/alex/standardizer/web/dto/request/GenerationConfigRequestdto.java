@@ -1,4 +1,4 @@
-package com.example.GeminiDocumentStandardizerApi.web.dto.requestdto;
+package dev.alex.standardizer.web.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class GenerationConfigDTO {
+public class GenerationConfigRequestdto {
     Integer maxOutputTokens;
     Double temperature;
 }

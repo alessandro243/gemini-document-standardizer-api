@@ -1,4 +1,4 @@
-package com.example.GeminiDocumentStandardizerApi.web.dto.responsedto;
+package dev.alex.standardizer.web.dto.response;
 
 import lombok.*;
 
@@ -7,6 +7,6 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class PartsResponseDto {
+public class PartsResponsedto {
     String text;
 }

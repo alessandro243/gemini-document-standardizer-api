@@ -1,4 +1,4 @@
-package com.example.GeminiDocumentStandardizerApi.web.dto.requestdto;
+package dev.alex.standardizer.web.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +9,6 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PartDto {
+public class PartRequestdto {
     String text;
 }

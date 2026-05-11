@@ -1,4 +1,4 @@
-package com.example.GeminiDocumentStandardizerApi.config;
+package dev.alex.standardizer.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
