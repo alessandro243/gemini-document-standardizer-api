@@ -8,7 +8,7 @@ import lombok.*;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContentRequestdto {
+public class ContentRequestDto {
     String role;
-    List<PartRequestdto> parts;
+    List<PartRequestDto> parts;
 }

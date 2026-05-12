@@ -1,11 +1,8 @@
 package dev.alex.standardizer.service;
 
 import dev.alex.standardizer.config.GeminiProperties;
-import dev.alex.standardizer.web.dto.request.ContentRequestdto;
-import dev.alex.standardizer.web.dto.request.GeminiRequestdto;
-import dev.alex.standardizer.web.dto.request.GenerationConfigRequestdto;
-import dev.alex.standardizer.web.dto.request.PartRequestdto;
-import dev.alex.standardizer.web.dto.response.GeminiResponsedto;
+import dev.alex.standardizer.web.dto.request.*;
+import dev.alex.standardizer.web.dto.response.GeminiResponseDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,16 +17,16 @@ public class GeminiService {
     private final RestClient restClient;
     private final GeminiProperties properties;
 
-    public GeminiRequestdto requestConstructor(GeminiRequestdto geminiRequestDTO, String prompt){
+    public GeminiRequestDto requestConstructor(GeminiRequestDto geminiRequestDTO, String prompt){
 
-        PartRequestdto partDto = new PartRequestdto();
+        PartRequestDto partDto = new PartRequestDto();
         partDto.setText(prompt);
 
-        GenerationConfigRequestdto generationConfigDTO = new GenerationConfigRequestdto();
+        GenerationConfigRequestDto generationConfigDTO = new GenerationConfigRequestDto();
         generationConfigDTO.setMaxOutputTokens(MAXOUTPUTTOKENS);
         generationConfigDTO.setTemperature(TEMPERATURE);
 
-        ContentRequestdto contentDto = new ContentRequestdto();
+        ContentRequestDto contentDto = new ContentRequestDto();
         contentDto.setRole(ROLE);
         contentDto.setParts(List.of(partDto));
 
@@ -39,12 +36,12 @@ public class GeminiService {
         return geminiRequestDTO;
     }
 
-    public GeminiResponsedto callGemini(GeminiRequestdto requestDTO, String prompt){
+    public GeminiResponseDto callGemini(GeminiRequestDto requestDTO, String prompt){
                 return this.restClient
                 .post()
                 .uri(properties.getUrl() + properties.getKey())
                 .body(requestConstructor(requestDTO, prompt))
                 .retrieve()
-                .body(GeminiResponsedto.class);
+                .body(GeminiResponseDto.class);
     }
 }

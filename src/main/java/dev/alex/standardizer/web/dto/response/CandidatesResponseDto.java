@@ -1,13 +1,12 @@
 package dev.alex.standardizer.web.dto.response;
 
-import java.util.List;
 import lombok.*;
 
-@Getter
 @Setter
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class GeminiResponsedto {
-    List<CandidatesResponsedto> candidates;
+public class CandidatesResponseDto {
+    ContentResponseDto content;
 }

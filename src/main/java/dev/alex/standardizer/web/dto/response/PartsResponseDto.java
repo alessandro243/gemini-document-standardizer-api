@@ -2,11 +2,11 @@ package dev.alex.standardizer.web.dto.response;
 
 import lombok.*;
 
-@Setter
 @Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
-public class CandidatesResponsedto {
-    ContentResponsedto content;
+public class PartsResponseDto {
+    String text;
 }

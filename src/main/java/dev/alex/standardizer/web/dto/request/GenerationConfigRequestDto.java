@@ -7,8 +7,9 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
-public class PartRequestdto {
-    String text;
+@NoArgsConstructor
+public class GenerationConfigRequestDto {
+    Integer maxOutputTokens;
+    Double temperature;
 }

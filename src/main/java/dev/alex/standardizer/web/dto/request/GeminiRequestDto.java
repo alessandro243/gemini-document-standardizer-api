@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class GeminiRequestdto {
-    List<ContentRequestdto> contents;
-    GenerationConfigRequestdto generationConfig;
+public class GeminiRequestDto {
+    List<ContentRequestDto> contents;
+    GenerationConfigRequestDto generationConfig;
 }

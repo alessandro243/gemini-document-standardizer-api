@@ -1,8 +1,9 @@
 package dev.alex.standardizer.web.controller;
 
 import dev.alex.standardizer.service.GeminiService;
-import dev.alex.standardizer.web.dto.request.GeminiRequestdto;
-import dev.alex.standardizer.web.dto.response.GeminiResponsedto;
+import dev.alex.standardizer.web.dto.request.GeminiRequestDto;
+import dev.alex.standardizer.web.dto.request.PromptDto;
+import dev.alex.standardizer.web.dto.response.GeminiResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ public class GeminiController {
 
     @PostMapping
     public String GeminiConnector(){
-        GeminiResponsedto response = service.callGemini(new GeminiRequestdto(), "quanto é a metade de 2 mais dois?");
+        GeminiResponseDto response = service.callGemini(new GeminiRequestDto(), new PromptDto().getPrompt());
         return response.getCandidates().getFirst().getContent().getParts().getFirst().getText();
     }
 }

@@ -8,6 +8,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class ContentResponsedto {
-    List<PartsResponsedto> parts;
+public class ContentResponseDto {
+    List<PartsResponseDto> parts;
 }
