@@ -12,14 +12,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestClient;
-
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ConexaoApiTest{
+class GeminiServiceTest{
 
     @Mock
     private RestClient restClient;
@@ -48,6 +47,7 @@ class ConexaoApiTest{
         service.callGemini(new GeminiRequestDto(), "Texto teste");
         verify(requestBodySpec).body(captor.capture());
         GeminiRequestDto envited = captor.getValue();
+
 
         Assertions.assertNotNull(envited);
         assertEquals("Texto teste", envited.getContents().get(0).getParts().get(0).getText());;
