@@ -37,7 +37,12 @@ public class GeminiService {
     }
 
     public GeminiResponseDto callGemini(GeminiRequestDto requestDTO, String prompt){
-                return this.restClient
+
+        if(prompt == null || prompt.isBlank()){
+            throw new IllegalArgumentException("O prompt não pode ser nulo ou vazio.");
+        }
+
+        return this.restClient
                 .post()
                 .uri(properties.getUrl() + properties.getKey())
                 .body(requestConstructor(requestDTO, prompt))
