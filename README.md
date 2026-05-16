@@ -1,7 +1,7 @@
 <h1 align="center">🕵️‍♂️ API Data & Payload Standardizer</h1>
 
 <p align="center">
-  <img src="https://i.pinimg.com/736x/a4/f7/9f/a4f79f9e94a5419fac5b8726bd2770d4.jpg" alt="Mascote Analista" width="500">
+  <img src="https://i.pinimg.com/736x/a4/f7/9f/a4f79f9e94a5419fac5b8726bd2770d4.jpg" alt="Mascote Analista" width="800">
 </p>
 
 <p align="center">
