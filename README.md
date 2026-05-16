@@ -44,4 +44,4 @@
 
 1. Clone o repositório:
    ```bash
-   git clone [https://github.com/seu-usuario/sua-api.git](https://github.com/seu-usuario/sua-api.git)
+   git clone https://github.com/alessandro243/gemini-document-standardizer-api.git
