@@ -1,7 +1,7 @@
 <h1 align="center">🕵️‍♂️ API Data & Payload Standardizer</h1>
 
 <p align="center">
-  <img src="GeminiDocumentStandardizerApi\src\main\java\dev\alex\assets\imagem.jpeg" alt="Mascote Analista Gemini" width="280">
+  <img src="./assets/mascote.png" alt="Mascote Analista Gemini" width="280">
 </p>
 
 <p align="center">
