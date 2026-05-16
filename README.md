@@ -7,7 +7,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/API--Collaborator-Gemini-0d2a5c?style=for-the-badge&logo=google-gemini" alt="AI Collaborator">
   <img src="https://img.shields.io/badge/Java-21-blue?style=for-the-badge&logo=openjdk" alt="Java">
-  <img src="https://img.shields.io/badge/Spring--Boot-3.x-6db33f?style=for-the-badge&logo=springboot" alt="Spring Boot">
+  <img src="https://img.shields.io/badge/Spring--Boot-3.5.14-6db33f?style=for-the-badge&logo=springboot" alt="Spring Boot">
 </p>
 
 <br>
@@ -17,31 +17,34 @@
 </p>
 
 <p align="justify">
-  Trabalhar com fluxos de dados heterogêneos, validar estruturas de dados (DTOs) e garantir que a informação que sai da sua API bate exatamente com o que está mapeado em uma planilha externa pode se tornar um verdadeiro caos de desenvolvimento.
+  Bem-vindo ao *Gemini Text Standardizer*! Este é um microsserviço construído em Java que utiliza o poder da Inteligência Artificial (Google Gemini) para atuar como um revisor profissional, corrigindo a gramática e padronizando arquivos com dados caóticos e produzindo um relatório padronizado.
 </p>
 
 <p align="justify">
-  Esta API foi construída especificamente para resolver esse problema de forma automatizada, limpa e padronizada. Ela atua comparando verificando relatórios não uniformes afim de estrair dados específicos desses documentos.
+  Este projeto foi desenvolvido com o intuito de aplicar conceitos modernos do ecossistema Spring Boot, arquitetura limpa e integração com APIs externas de Inteligência Artificial. Ideal para demonstrar habilidades de backend e boas práticas de codificação.
 </p>
 
 <hr>
 
-## 🚀 Funcionalidades Principais
-
-* **Validação Rigorosa de DTOs:** Estruturas de dados validadas automaticamente para evitar payloads malformados.
-* **Cruzamento Inteligente de Dados:** Processamento eficiente que compara e valida dados vindos de APIs com estruturas de planilhas.
-* **Arquitetura Limpa:** Código desacoplado e pronto para escala, utilizando as melhores práticas do ecossistema Java/Spring.
-
 ## 🛠️ Tecnologias Utilizadas
 
-* **Java 21**
-* **Spring Boot 3.15.4**
-* **Spring Validation** (para auditoria e consistência dos DTOs)
-* **Gemini Api**
-* **Maven**
+* **Java 21:** Utilizando recursos modernos como Records para um código mais limpo e conciso.
+* **Spring Boot 3.5.14:** Framework base para a criação do microsserviço e injeção de dependências.
+* **Spring RestClient:** Cliente HTTP moderno e síncrono para consumo da API do Google AI Studio.
+* **Google Gemini API (1.5 Flash):** Modelo de linguagem de IA gerativa utilizado para o processamento de linguagem natural (NLP).
+* **Maven:** Gerenciador de dependências e build do projeto.
+
+<hr>
 
 ## 📄 Como Executar o Projeto
 
-1. Clone o repositório:
+### Pré-requisitos
+* Java 21 instalado na sua máquina.
+* Maven instalado.
+* Uma chave de API (API Key) gerada no [Google AI Studio](https://aistudio.google.com/api-keys).
+
+### Passo a Passo
+
+1. *Clone o repositório:*
    ```bash
    git clone https://github.com/alessandro243/gemini-document-standardizer-api.git
