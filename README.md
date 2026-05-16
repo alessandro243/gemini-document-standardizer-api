@@ -6,14 +6,14 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/API--Collaborator-Gemini-0d2a5c?style=for-the-badge&logo=google-gemini" alt="AI Collaborator">
-  <img src="https://img.shields.io/badge/Java-17-blue?style=for-the-badge&logo=openjdk" alt="Java">
+  <img src="https://img.shields.io/badge/Java-21-blue?style=for-the-badge&logo=openjdk" alt="Java">
   <img src="https://img.shields.io/badge/Spring--Boot-3.x-6db33f?style=for-the-badge&logo=springboot" alt="Spring Boot">
 </p>
 
 <br>
 
 <p align="center">
-  <strong>Você já precisou padronizar payloads de APIs e cruzar com dados de planilhas complexas sem perder a sanidade? 🤯</strong>
+  <strong>Você já precisou padronizar payloads de APIs e cruzar com dados de planilhas complexas sem perder a sanidade?</strong>
 </p>
 
 <p align="justify">
@@ -21,7 +21,7 @@
 </p>
 
 <p align="justify">
-  Esta API foi construída especificamente para resolver esse problema de forma automatizada, limpa e padronizada. Ela atua como um verdadeiro "detetive", inspecionando cada payload e garantindo a consistência das informações de ponta a ponta.
+  Esta API foi construída especificamente para resolver esse problema de forma automatizada, limpa e padronizada. Ela atua comparando verificando relatórios não uniformes afim de estrair dados específicos desses documentos.
 </p>
 
 <hr>
@@ -34,19 +34,13 @@
 
 ## 🛠️ Tecnologias Utilizadas
 
-* **Java 17**
-* **Spring Boot 3.x**
+* **Java 21**
+* **Spring Boot 3.15.4**
 * **Spring Validation** (para auditoria e consistência dos DTOs)
+* **Gemini Api**
+* **Maven**
 
 ## 🤖 Desenvolvimento & Colaboração
-
-<p align="justify">
-  Este repositório tem um diferencial especial: ele foi desenhado em uma parceria direta entre o desenvolvedor e <strong>Inteligência Artificial</strong>.
-</p>
-
-<p align="justify">
-  O mascote analista no topo deste arquivo reflete a dinâmica dos bastidores do projeto: o <strong>Gemini (Google)</strong> atuou ativamente como copiloto técnico no design de arquitetura, estruturação lógica dos DTOs e refinamento das regras de validação. O visual de "detetive gordinho de cartola" representa o processo minucioso de <em>double check</em> que a API executa em cada requisição.
-</p>
 
 <hr>
 
