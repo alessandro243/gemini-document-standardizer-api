@@ -1,8 +1,12 @@
 package dev.alex.standardizer.service;
 
 import dev.alex.standardizer.config.GeminiProperties;
+import dev.alex.standardizer.utils.FileExtractorUtil;
+import dev.alex.standardizer.web.dto.DivergenciaDTO;
 import dev.alex.standardizer.web.dto.request.*;
 import dev.alex.standardizer.web.dto.response.GeminiResponseDto;
+
+import java.io.File;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,11 +20,12 @@ public class GeminiService {
     private final Double TEMPERATURE = 0.7;
     private final RestClient restClient;
     private final GeminiProperties properties;
+    private FileExtractorUtil fileExtractorUtil = new FileExtractorUtil();
 
-    public GeminiRequestDto requestConstructor(GeminiRequestDto geminiRequestDTO, String prompt){
+    public GeminiRequestDto requestConstructor(GeminiRequestDto geminiRequestDTO, File file){
 
         PartRequestDto partDto = new PartRequestDto();
-        partDto.setText(prompt);
+        partDto.setText(fileExtractorUtil.promptConfig(file));
 
         GenerationConfigRequestDto generationConfigDTO = new GenerationConfigRequestDto();
         generationConfigDTO.setMaxOutputTokens(MAXOUTPUTTOKENS);
@@ -36,17 +41,16 @@ public class GeminiService {
         return geminiRequestDTO;
     }
 
-    public GeminiResponseDto callGemini(GeminiRequestDto requestDTO, String prompt){
+    public void callGemini(GeminiRequestDto requestDTO, File report){
 
-        if(prompt == null || prompt.isBlank()){
-            throw new IllegalArgumentException("O prompt não pode ser nulo ou vazio.");
-        }
-
-        return this.restClient
+        GeminiResponseDto retorno = this.restClient
                 .post()
                 .uri(properties.getUrl() + properties.getKey())
-                .body(requestConstructor(requestDTO, prompt))
+                .body(requestConstructor(requestDTO, report))
                 .retrieve()
                 .body(GeminiResponseDto.class);
+
+        fileExtractorUtil.parseCsvContent(retorno);
+
     }
 }

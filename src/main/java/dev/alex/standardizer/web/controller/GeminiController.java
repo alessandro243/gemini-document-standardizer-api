@@ -14,8 +14,8 @@ public class GeminiController {
     private final GeminiService service;
 
     @PostMapping
-    public String GeminiConnector(){
-        GeminiResponseDto response = service.callGemini(new GeminiRequestDto(), new PromptDto().getPrompt());
-        return response.getCandidates().getFirst().getContent().getParts().getFirst().getText();
+    public void GeminiConnector(){
+        /// GeminiResponseDto response =
+        service.callGemini(new GeminiRequestDto());
     }
 }
