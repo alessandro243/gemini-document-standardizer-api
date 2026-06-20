@@ -11,4 +11,5 @@ import lombok.*;
 public class GeminiRequestDto {
     List<ContentRequestDto> contents;
     GenerationConfigRequestDto generationConfig;
+
 }

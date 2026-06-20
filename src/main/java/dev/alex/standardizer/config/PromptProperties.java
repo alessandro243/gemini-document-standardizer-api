@@ -8,5 +8,5 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 public class PromptProperties {
-    private String promptDir = "C:\\Users\\alexa\\Desktop\\spring projects\\gemini-document-standardizer-api-main\\gemini-document-standardizer-api-main\\src\\main\\resources\\prompt.txt";;
+    private String promptDir = "C:\\Users\\alexa\\Desktop\\spring projects\\gemini-document-standardizer-api-main\\prompt.txt";
 }
