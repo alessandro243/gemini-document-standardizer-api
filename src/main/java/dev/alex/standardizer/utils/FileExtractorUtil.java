@@ -79,7 +79,7 @@ public class FileExtractorUtil {
         Map<String, StoreReportDto> finalStoreReport = new HashMap<>();
         String line;
         boolean firstLine = true;
-        Set<String> notasProcessadas = new HashSet<>();
+        Set<String> processedNotes = new HashSet<>();
         int idxNota = 0, idxLoja = 0, idxVol = 0, idxValor = 0, idxData = 0, idxProd = 0;
 
         try (BufferedReader br = new BufferedReader(new InputStreamReader(filePath.getInputStream(), StandardCharsets.UTF_8))) {
@@ -92,14 +92,14 @@ public class FileExtractorUtil {
                 if (firstLine){
 
                 String separator = separatorDetector(line);
-                ArrayList<String> colunas = removeQuotes(line, separator);
+                ArrayList<String> columns = removeQuotes(line, separator);
 
-                    idxNota = colunas.indexOf(geminiResponseMap.get("nota_fiscal").trim());
-                    idxLoja = colunas.indexOf(geminiResponseMap.get("loja_origem").trim());
-                    idxVol = colunas.indexOf(geminiResponseMap.get("volume").trim());
-                    idxValor = colunas.indexOf(geminiResponseMap.get("valor_declarado").trim());
-                    idxData = colunas.indexOf(geminiResponseMap.get("data").trim());
-                    idxProd = colunas.indexOf(geminiResponseMap.get("produto").trim());
+                    idxNota = columns.indexOf(geminiResponseMap.get("nota_fiscal").trim());
+                    idxLoja = columns.indexOf(geminiResponseMap.get("loja_origem").trim());
+                    idxVol = columns.indexOf(geminiResponseMap.get("volume").trim());
+                    idxValor = columns.indexOf(geminiResponseMap.get("valor_declarado").trim());
+                    idxData = columns.indexOf(geminiResponseMap.get("data").trim());
+                    idxProd = columns.indexOf(geminiResponseMap.get("produto").trim());
 
                     firstLine = false;
                     continue;
@@ -123,9 +123,9 @@ public class FileExtractorUtil {
                 StoreReportDto storeReportDto = finalStoreReport.computeIfAbsent(storeName, k -> new StoreReportDto());
                 storeReportDto.increaseTotalPecas(volum);
 
-                if (!notasProcessadas.contains(numNota)) {
+                if (!processedNotes.contains(numNota)) {
                     storeReportDto.increaseTotalRetido(decimalValue);
-                    notasProcessadas.add(numNota);
+                    processedNotes.add(numNota);
                 }
             }
         } catch (IOException e) {
