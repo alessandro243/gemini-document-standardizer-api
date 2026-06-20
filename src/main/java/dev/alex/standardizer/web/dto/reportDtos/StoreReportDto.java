@@ -6,14 +6,14 @@ import java.math.BigDecimal;
 
 @Getter @Setter @AllArgsConstructor @NoArgsConstructor @ToString
 public class StoreReportDto {
-    private Integer volumeTotalPecas = 0;
-    BigDecimal valorTotalPedidos = BigDecimal.ZERO;
+    private Integer accumulatedVolume = 0;
+    private BigDecimal accumulatedValue = BigDecimal.ZERO;
 
     public void increaseTotalPecas(Integer value){
-        volumeTotalPecas += value;
+        accumulatedVolume += value;
     }
 
     public void increaseTotalRetido(BigDecimal value){
-        valorTotalPedidos = valorTotalPedidos.add(value);
+        accumulatedValue = accumulatedValue.add(value);
     }
 }

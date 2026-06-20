@@ -33,7 +33,6 @@ public class GeminiService {
         GenerationConfigRequestDto generationConfigDTO = new GenerationConfigRequestDto();
         generationConfigDTO.setMaxOutputTokens(MAXOUTPUTTOKENS);
         generationConfigDTO.setTemperature(TEMPERATURE);
-        ///generationConfigDTO.setResponseMimeType("application/json");
 
         ContentRequestDto contentDto = new ContentRequestDto();
         contentDto.setRole(ROLE);
@@ -53,9 +52,9 @@ public class GeminiService {
                 .body(requestConstructor(requestDTO, report))
                 .retrieve()
                 .body(GeminiResponseDto.class);
-        ObjectMapper ferramentaJson = new ObjectMapper();
-        Map<String, String> manualIa = ferramentaJson.readValue(retorno.getCandidates().get(0).getContent().getParts().get(0).getText(), Map.class);
+        ObjectMapper jsonMapper = new ObjectMapper();
+        Map<String, String> columnMapping = jsonMapper.readValue(retorno.getCandidates().get(0).getContent().getParts().get(0).getText(), Map.class);
 
-        return fileExtractorUtil.parseCsvContent(manualIa, report);
+        return fileExtractorUtil.parseCsvContent(columnMapping, report);
     }
 }

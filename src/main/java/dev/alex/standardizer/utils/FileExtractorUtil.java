@@ -59,7 +59,6 @@ public class FileExtractorUtil {
         } catch (IOException error) {
             System.out.println("Deu ruim ao ler o relatório físico");
         }
-        File arquivoDebug = new File(filePrompt);
 
         try (BufferedReader bf = new BufferedReader(new FileReader(filePrompt))) {
 
@@ -76,8 +75,8 @@ public class FileExtractorUtil {
         return filePrompt + "\n" + fileReport;
     }
 
-    public Map<String, StoreReportDto> parseCsvContent(Map<String, String> mapa, MultipartFile filePath) {
-        Map<String, StoreReportDto> mapa_ = new HashMap<>();
+    public Map<String, StoreReportDto> parseCsvContent(Map<String, String> geminiResponseMap, MultipartFile filePath) {
+        Map<String, StoreReportDto> finalStoreReport = new HashMap<>();
         String line;
         boolean firstLine = true;
         Set<String> notasProcessadas = new HashSet<>();
@@ -95,12 +94,12 @@ public class FileExtractorUtil {
                 String separator = separatorDetector(line);
                 ArrayList<String> colunas = removeQuotes(line, separator);
 
-                    idxNota = colunas.indexOf(mapa.get("nota_fiscal").trim());
-                    idxLoja = colunas.indexOf(mapa.get("loja_origem").trim());
-                    idxVol = colunas.indexOf(mapa.get("volume").trim());
-                    idxValor = colunas.indexOf(mapa.get("valor_declarado").trim());
-                    idxData = colunas.indexOf(mapa.get("data").trim());
-                    idxProd = colunas.indexOf(mapa.get("produto").trim());
+                    idxNota = colunas.indexOf(geminiResponseMap.get("nota_fiscal").trim());
+                    idxLoja = colunas.indexOf(geminiResponseMap.get("loja_origem").trim());
+                    idxVol = colunas.indexOf(geminiResponseMap.get("volume").trim());
+                    idxValor = colunas.indexOf(geminiResponseMap.get("valor_declarado").trim());
+                    idxData = colunas.indexOf(geminiResponseMap.get("data").trim());
+                    idxProd = colunas.indexOf(geminiResponseMap.get("produto").trim());
 
                     firstLine = false;
                     continue;
@@ -111,27 +110,27 @@ public class FileExtractorUtil {
                 }
 
                 String separator = separatorDetector(line);
-                ArrayList<String> colunas = removeQuotes(line, separator);
+                ArrayList<String> columns = removeQuotes(line, separator);
 
-                String numNota = colunas.get(idxNota).trim();
-                String valorVolume = colunas.get(idxVol).trim();
-                int volume = Integer.parseInt(valorVolume);
-                String valorMonetario = colunas.get(idxValor).trim();
-                String valorLimpo = valorMonetario.replaceAll("[^0-9.]", "");
-                BigDecimal valorDecimal = new BigDecimal(valorLimpo);
-                String loja = colunas.get(idxLoja).trim();
+                String numNota = columns.get(idxNota).trim();
+                String valorVolume = columns.get(idxVol).trim();
+                int volum = Integer.parseInt(valorVolume);
+                String monetaryValue = columns.get(idxValor).trim();
+                String cleanValue = monetaryValue.replaceAll("[^0-9.]", "");
+                BigDecimal decimalValue = new BigDecimal(cleanValue);
+                String storeName = columns.get(idxLoja).trim();
 
-                StoreReportDto dtoNTemComo = mapa_.computeIfAbsent(loja, k -> new StoreReportDto());
-                dtoNTemComo.increaseTotalPecas(volume);
+                StoreReportDto storeReportDto = finalStoreReport.computeIfAbsent(storeName, k -> new StoreReportDto());
+                storeReportDto.increaseTotalPecas(volum);
 
                 if (!notasProcessadas.contains(numNota)) {
-                    dtoNTemComo.increaseTotalRetido(valorDecimal);
+                    storeReportDto.increaseTotalRetido(decimalValue);
                     notasProcessadas.add(numNota);
                 }
             }
         } catch (IOException e) {
             System.out.println("Deu ruim!");
         }
-        return mapa_;
+        return finalStoreReport;
     }
 }
