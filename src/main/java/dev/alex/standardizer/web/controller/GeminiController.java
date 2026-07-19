@@ -1,13 +1,16 @@
 package dev.alex.standardizer.web.controller;
 
 import dev.alex.standardizer.service.GeminiService;
-import dev.alex.standardizer.web.dto.reportDtos.StoreReportDto;
+import dev.alex.standardizer.web.dto.reportdtos.StoreReportDto;
 import dev.alex.standardizer.web.dto.request.GeminiRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 @RestController
 @RequiredArgsConstructor
@@ -16,7 +19,7 @@ public class GeminiController {
     private final GeminiService service;
 
     @PostMapping
-    public Map<String, StoreReportDto> GeminiConnector(@RequestParam("File") MultipartFile multipartFile) throws Exception {
+    public StringBuilder GeminiConnector(@RequestParam("File") MultipartFile multipartFile) throws Exception {
         return service.callGemini(new GeminiRequestDto(), multipartFile);
     }
 }
