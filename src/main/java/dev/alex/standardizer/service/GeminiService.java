@@ -30,6 +30,18 @@ public class GeminiService {
     private FileExtractorUtil fileExtractorUtil = new FileExtractorUtil();
     private final Db_Utils database;
 
+    public StringBuilder parseAndProcessReport(GeminiRequestDto requestDTO, MultipartFile report) throws Exception{
+        GeminiResponseDto retorno = callGemini(requestDTO, report);
+        ObjectMapper jsonMapper = new ObjectMapper();
+        Map<String, String> columnMapping = jsonMapper.readValue(retorno.getCandidates().get(0).getContent().getParts().get(0).getText(), Map.class);
+        return fileExtractorUtil.parseCsvContent(columnMapping, report, database);
+    }
+
+    public StringBuilder compareReportRows(GeminiRequestDto report ,MultipartFile multipartFile) throws Exception{
+        GeminiResponseDto retorno = callGemini(report, multipartFile);
+        return new StringBuilder();
+    }
+
     public GeminiRequestDto requestConstructor(GeminiRequestDto geminiRequestDTO, MultipartFile file){
 
         PartRequestDto partDto = new PartRequestDto();
@@ -49,17 +61,13 @@ public class GeminiService {
         return geminiRequestDTO;
     }
 
-    public StringBuilder callGemini(GeminiRequestDto requestDTO, MultipartFile report) throws Exception{
-
+    public GeminiResponseDto callGemini(GeminiRequestDto requestDTO, MultipartFile report) throws Exception{
         GeminiResponseDto retorno = this.restClient
                 .post()
                 .uri(properties.getUrl() + properties.getKey())
                 .body(requestConstructor(requestDTO, report))
                 .retrieve()
                 .body(GeminiResponseDto.class);
-        ObjectMapper jsonMapper = new ObjectMapper();
-        Map<String, String> columnMapping = jsonMapper.readValue(retorno.getCandidates().get(0).getContent().getParts().get(0).getText(), Map.class);
-        System.out.println(retorno + "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<");
-        return fileExtractorUtil.parseCsvContent(columnMapping, report, database);
+        return retorno;
     }
 }

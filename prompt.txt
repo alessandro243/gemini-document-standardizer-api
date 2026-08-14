@@ -4,11 +4,17 @@ Sua tarefa é analisar o CABEÇALHO (nomes das colunas) e a AMOSTRA DE DADOS for
 Campos que você deve identificar:
 
 "id_relatorio" -> Se o arquivo contiver um identificador ou nome de relatório no topo, extraia-o e coloque-o entre parenteses como no exemplo. Caso contrário, retorne "null". (Ex: (Relatório I), (Relatório II), (Relatório III), (Relatório IV), (Relatório V))
-"loja_origem" -> Coluna que representa o identificador, nome ou código da loja/filial.
-"volume" -> Coluna que representa a quantidade física de volumes/caixas/peças.
-"valor_declarado"-> Identifique a coluna que contém o valor total consolidado da nota fiscal (Escolha a coluna mais provável).
+"loja_origem" -> Coluna que representa o identificador, nome ou código da loja/filial de origem.
+"loja_destino" -> Coluna que representa o identificador, nome ou código da loja/filial de destino.
 "data" -> Coluna que indica a data em que a transação ocorreu.
-"produto" -> Coluna que representa o identificador, código ou nome do produto.
+"natureza_operacao" -> Coluna que descreve o tipo ou natureza da operação (Ex: Transferência, Venda, Devolução).
+"qtd_dias" -> Coluna que indica o prazo ou quantidade de dias.
+"volume" -> Coluna que representa a quantidade física de volumes/caixas/peças.
+"codigo_produto" -> Coluna que representa o código ou identificador numérico do produto.
+"produto" -> Coluna que representa o nome ou descrição do produto.
+"valor_bruto" -> Coluna que representa o valor unitário ou bruto do item.
+"valor_total_produto" -> Coluna que representa o valor total consolidado apenas dos produtos do item.
+"valor_declarado" -> Identifique a coluna que contém o valor total consolidado da nota fiscal (Escolha a coluna mais provável).
 "nota_fiscal" -> Coluna que representa o número da nota fiscal ou identificador do documento. (Ex: num_nf, nota, numero_documento, nf, nr_nota)
 
 --- Regras Críticas de Execução ---

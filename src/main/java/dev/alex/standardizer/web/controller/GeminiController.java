@@ -18,8 +18,14 @@ import java.util.TreeMap;
 public class GeminiController {
     private final GeminiService service;
 
-    @PostMapping
-    public StringBuilder GeminiConnector(@RequestParam("File") MultipartFile multipartFile) throws Exception {
-        return service.callGemini(new GeminiRequestDto(), multipartFile);
+    @PostMapping("/final-report")
+    public StringBuilder processFinalReport (@RequestParam("File") MultipartFile multipartFile) throws Exception {
+        return service.parseAndProcessReport(new GeminiRequestDto(), multipartFile);
     }
+
+    @PostMapping("/report-parser")
+    public StringBuilder compareReportRows(@RequestParam("File") MultipartFile multipartFile) throws Exception{
+        return service.compareReportRows(new GeminiRequestDto(),multipartFile );
+    }
+
 }

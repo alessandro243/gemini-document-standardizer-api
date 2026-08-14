@@ -85,7 +85,7 @@ public class FileExtractorUtil {
         String line;
         boolean firstLine = true;
         Set<String> processedNotes = new HashSet<>();
-        int idxNota = 0, idxLoja = 0, idxVol = 0, idxValor = 0, idxData = 0, idxProd = 0;
+        int idxNota = 0, idxLoja = 0, idxVol = 0, idxValor = 0, idxData = 0, idxProd = 0, idxLojaDest = 0, idxNatOp = 0, idxQtdDias = 0, idxCodProd = 0, idxVBrut = 0, idxTotalProd = 0;
         String reportId = geminiResponseMap.get("id_relatorio");
         int volum2 = 0;
         BigDecimal big = BigDecimal.ZERO;
@@ -107,6 +107,13 @@ public class FileExtractorUtil {
                     idxValor = columns.indexOf(geminiResponseMap.get("valor_declarado").trim());
                     idxData = columns.indexOf(geminiResponseMap.get("data").trim());
                     idxProd = columns.indexOf(geminiResponseMap.get("produto").trim());
+                    idxCodProd = columns.indexOf(geminiResponseMap.get("codigo_produto").trim());
+                    idxNatOp = columns.indexOf(geminiResponseMap.get("natureza_operacao").trim());
+                    idxVBrut = columns.indexOf(geminiResponseMap.get("valor_bruto").trim());
+                    idxQtdDias = columns.indexOf(geminiResponseMap.get("qtd_dias"));
+                    idxTotalProd = columns.indexOf(geminiResponseMap.get("valor_total_produto"));
+                    idxLojaDest = columns.indexOf(geminiResponseMap.get("loja_destino").trim());
+
                     System.out.println(geminiResponseMap.get("valor_declarado").trim() + "&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
                     System.out.println(columns.get(idxValor) + "¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨");
                     firstLine = false;
@@ -123,21 +130,23 @@ public class FileExtractorUtil {
                 String separator = separatorDetector(line);
                 ArrayList<String> columns = removeQuotes(line, separator);
 
+                String lojaOrigem = columns.get(idxLoja).trim();
+                String data = columns.get(idxData).trim();
+                String produto = columns.get(idxProd).trim();
+                String codProd = columns.get(idxCodProd).trim();
+                String natOp = columns.get(idxNatOp).trim();
+                String vBruto = columns.get(idxVBrut).trim();
+                String qtdDias = columns.get(idxQtdDias).trim();
+                String totalProd = columns.get(idxTotalProd).trim();
+                String lojaDest = columns.get(idxLojaDest).trim();
                 String numNota = columns.get(idxNota).trim();
                 String valorVolume = columns.get(idxVol).trim();
                 String storeName = columns.get(idxLoja).trim();
                 int volum = Integer.parseInt(valorVolume);
                 String primeiramente = columns.get(idxValor).trim();
-                ///System.out.println("Loja: " + storeName + " Valor: " + primeiramente);
                 String monetaryValue = primeiramente.replaceAll("[^0-9,.]", "");
                 String cleanValue = monetaryValue.replaceAll("\\.(?=.*\\.)", "");
-                ///String cleanValue = .replaceAll("\\.(?=.*\\.)", "");
-                ///System.out.println("Monetary value: " + monetaryValue);
-                ///System.out.println("Clean value: " + cleanValue);
                 Double decimalValue = Double.parseDouble(cleanValue);
-                ///System.out.println("Decimal value: " + decimalValue);
-
-
                 StoreReportDto storeReportDto = finalStoreReport.computeIfAbsent(storeName, k -> new StoreReportDto());
                 storeReportDto.increaseTotalPecas(volum);
 
@@ -160,6 +169,7 @@ public class FileExtractorUtil {
     }
 
     public StringBuilder makeDivergenceDto(List<Map<String, Object>> data, Map<String, StoreReportDto> finalStore){
+        System.out.println(finalStore + "Finaaaaaaaaaaaaaaaaaaaaaaaaaal");
         List<LinkedHashMap<String, Object>> returnMap = new ArrayList<>();
         Map<String, String>  keys_ = new HashMap<>();
         Double valorTotal = 0.0;
@@ -168,9 +178,6 @@ public class FileExtractorUtil {
         Double volumeTotalBank = 0.0;
         StringBuilder csv = new StringBuilder();
         csv.append("loja_origem;valor_total_retido;atraso_medio_dias;unidade_auditora;volume_total_pecas;Volume conciliado;Divergencia de volume;Valor conciliado;Divergencia de valor" + "\n");
-        System.out.println("Data: " + data);
-        System.out.println("finalStore: " + finalStore);
-
         for (Map<String, Object> map__ : data) {
             LinkedHashMap<String, Object> returnMap2 = new LinkedHashMap<>();
             HashMap<String, Object> meuHashMap = new HashMap<>(map__);
@@ -225,7 +232,10 @@ public class FileExtractorUtil {
             returnMap.add(returnMap2);
             System.out.println("valorTotal: " + valorTotal + "valorTotalBank: " + valorTotalBank);
         }
+
         ///System.out.println(csv);
         return csv;
     }
 }
+///finalStoreReport: {Filial Batel (PR)=StoreReportDto(accumulatedVolume=188, accumulatedValue=3840.2), Megastore Jardins (SP)=StoreReportDto(accumulatedVolume=5, accumulatedValue=38.52), Filial Floripa (SC)=StoreReportDto(accumulatedVolume=137, accumulatedValue=541.82), Filial Copacabana (RJ)=StoreReportDto(accumulatedVolume=34, accumulatedValue=187.94)}FinalStore<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<,,,
+///meuHashMap, valores antés do cálculo de diferenças: {loja_origem=Filial Copacabana (RJ), valor_total_retido=187.94, atraso_medio_dias=28.0, unidade_auditora=Central Norte (Relatório II), volume_total_pecas=34}meuHashMap<<<<<<<<<<<<<<<<<<
