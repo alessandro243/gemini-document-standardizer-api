@@ -1,4 +1,6 @@
 package dev.alex.standardizer;
+import dev.alex.standardizer.utils.DateUtils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -26,79 +28,94 @@ public class TestMap {
         return finalMap;
     }
 
-    public void validoCodProdTrue(String codProd, Map<String, String> returnMap, Boolean cond){
-        if (!cond){
-            divergenceList.add("Produto não encontrado");
+    public void validoCodProdTrue(String register, String codProd_, Map<String, String> returnMap){
+        String codProd = codProd_.replaceAll("\\D", "");
+        if (!codProd.equals(register)){
+            divergenceList.add("Produto não encontrado: " + codProd);
         }
         returnMap.put("Código", codProd);
     }
 
-    public void validoVolumeTrue(String register, String volume, Map<String, String> returnMap, boolean cond){
-        if (!cond){
+    public void validoVolumeTrue(String register, String volume_, Map<String, String> returnMap){
+        String volume = volume_.replaceAll("\\D", "");
+        if (!volume.equals(register)){
             divergenceList.add("Quantidade: " + (Integer.parseInt(volume) - Integer.parseInt(register)));
         }
         returnMap.put("Quantidade", volume);
     }
 
-    public void validoNumNotaDestTrue(String numNota, Map<String, String> returnMap, Boolean cond){
-        if (!cond){
-            divergenceList.add("Nota divergente");
+    public void validoNumNotaDestTrue(String register, String numNota, Map<String, String> returnMap){
+        if (!numNota.equals(register)){
+            divergenceList.add("Nota divergente: " + numNota);
         }
         returnMap.put("N° Nota Fiscal", numNota);
     }
 
-    public void validolojaDestTrue(String lojaDest, Map<String, String> returnMap, Boolean cond){
-        if (!cond){
-            divergenceList.add("Loja divergente");
+    public void validolojaDestTrue(String register,String lojaDest, Map<String, String> returnMap){
+        if (!lojaDest.equals(register)){
+            divergenceList.add("Loja divergente: " + lojaDest);
         }
         returnMap.put("Loja Destino", lojaDest);
     }
 
-    public void validoQtdDiasTrue(String qtdDias, Map<String, String> returnMap, boolean b){
+    public void validoQtdDiasTrue(String register, String qtdDias, Map<String, String> returnMap){
+        if (!qtdDias.equals(register)){
+            divergenceList.add(String.format("Quantidade: %.2f", (Double.parseDouble(qtdDias) - Double.parseDouble(register))));
+        }
         returnMap.put("Qtd Dias", qtdDias);
     }
 
-    public void validoNatOpTrue(String register, String natOp, Map<String, String> returnMap, Boolean cond){
-        if (!cond){
-            divergenceList.add("Natureza divergente");
+    public void validoNatOpTrue(String register, String natOp_, Map<String, String> returnMap){
+        String natOp = natOp_.replaceAll("^(\\d+)\\s*[:|\\-]?\\s*", "$1 - ");
+
+        if (!natOp.equals(register)){
+            divergenceList.add("Natureza divergente: " + natOp);
         }
         returnMap.put("Natureza", natOp);
     }
 
-    public void validoProdutoTrue(String produto, Map<String, String> returnMap, Boolean cond){
-        if (!cond){
-            divergenceList.add("Produto não encontrado");
+    public void validoProdutoTrue(String register, String produto, Map<String, String> returnMap){
+        if (!produto.equals(register)){
+            divergenceList.add("Produto não encontrado: " + produto);
         }
         returnMap.put("Descrição do Produto", produto);
-
     }
 
-    public void validoDataTrue(String data, Map<String, String> returnMap, Boolean cond){
-        if (!cond){
-            divergenceList.add("Data divergente");
+    public void validoDataTrue(String register_, String data_, Map<String, String> returnMap){
+        String data = DateUtils.padronizarData(data_);
+        String register = DateUtils.padronizarData(register_);
+
+        if (!data.equals(register)){
+            divergenceList.add("Data divergente: " + data);
         }
         returnMap.put("Data de Emissão", data);
     }
 
-    public void validoLojaOrigemTrue(String lojaOrigem, Map<String, String> returnMap, Boolean cond){
-        if (!cond){
-            divergenceList.add("Loja origem divergente");
+    public void validoLojaOrigemTrue(String register, String lojaOrigem, Map<String, String> returnMap){
+        if (!lojaOrigem.equals(register)){
+            divergenceList.add("Loja origem divergente: " + lojaOrigem);
         }
         returnMap.put("Loja Origem", lojaOrigem);
     }
 
-    public void validoValorBrutoTrue(String register, String valorBruto, Map<String, String> returnMap, boolean b){
+    public void validoValorBrutoTrue(String register, String valorBruto, Map<String, String> returnMap){
+        if (!valorBruto.equals(register)){
+            divergenceList.add(String.format("Valor unitário: R$ %.2f", (Double.parseDouble(valorBruto) - Double.parseDouble(register))));
+        }
         returnMap.put("Valor Bruto", valorBruto);
     }
 
-    public void validoValorTotalTrue(String register, String valorTotal, Map<String, String> returnMap, boolean cond){
-        if (!cond){
-            divergenceList.add("Total Produto: " + (Double.parseDouble(valorTotal) - Double.parseDouble(register)));
+    public void validoValorTotalTrue(String register, String valorTotal, Map<String, String> returnMap){
+        if (!valorTotal.equals(register)){
+            divergenceList.add("Total Produto: R$" + (Double.parseDouble(valorTotal) - Double.parseDouble(register)));
         }
         returnMap.put("Valor Total Produto", valorTotal);
     }
 
-    public void validoValorNotaTrue(String register, String valorNota, Map<String, String> returnMap, boolean b){
+    public void validoValorNotaTrue(String register, String valorNota, Map<String, String> returnMap){
+        if (!valorNota.equals(register)){
+            divergenceList.add(String.format("Valor da nota: R$ %.2f", (Double.parseDouble(valorNota) - Double.parseDouble(register))));
+        }
         returnMap.put("Valor da Nota", valorNota);
     }
 
@@ -121,8 +138,8 @@ public class TestMap {
         this.finalMap.put("Valor Total Produto", null);
         this.finalMap.put("Valor da Nota", null);
         this.finalMap.put("Natureza", null);
-        this.finalMap.put("Conciliado", null);
-        this.finalMap.put("Divergência", null);
+        this.finalMap.put("Conciliado", "OK");
+        this.finalMap.put("Divergência", "-");
         dataConfig(register, valorBruto, valorTotal, valorNota, lojaOrigem, data, produto, natOp, qtdDias, lojaDest, numNota, volume, codProd);
     }
 
@@ -145,31 +162,30 @@ public class TestMap {
         Map<Boolean, Consumer<String>> numNotaMap = new HashMap<>();
         Map<Boolean, Consumer<String>> codProdMap = new HashMap<>();
 
-        // Configura as 12 condições e suas respectivas ações
-        valorBrutoMap.put(true, valor -> validoValorBrutoTrue(register.get("valor_bruto").toString(), valorBruto, finalMap, valorBruto.equals(register.get("valor_bruto").toString())));
-        valorTotalMap.put(true, valor -> validoValorTotalTrue(register.get("valor_total_produto").toString(), valorTotal, finalMap, valorTotal.equals(register.get("valor_total_produto").toString())));
-        valorNotaMap.put(true, valor -> validoValorNotaTrue(register.get("valor_nota").toString(), valorNota, finalMap, valorNota.equals(register.get("valor_nota").toString())));
-        lojaOrigemMap.put(true, valor -> validoLojaOrigemTrue(lojaOrigem, finalMap, lojaOrigem.equals(register.get("loja_origem").toString())));
-        dataMap.put(true, valor -> validoDataTrue(data, finalMap, data.equals(register.get("data_emissao").toString())));
-        produtoMap.put(true, valor -> validoProdutoTrue(produto, finalMap, produto.equals(register.get("descricao_produto").toString())));
-        natOpMap.put(true, valor -> validoNatOpTrue(register.get("natureza_operacao").toString(), natOp, finalMap, natOp.equals(register.get("natureza_operacao").toString())));
-        qtdDiasMap.put(true, valor -> validoQtdDiasTrue(qtdDias, finalMap, qtdDias.equals(register.get("qtd_dias").toString())));
-        lojaDestMap.put(true, valor -> validolojaDestTrue(lojaDest, finalMap, lojaDest.equals(register.get("loja_destino").toString())));
-        numNotaMap.put(true, valor -> validoNumNotaDestTrue(numNota, finalMap, numNota.equals(register.get("num_nota_fiscal").toString())));
-        volumeMap.put(true, valor -> validoVolumeTrue(register.get("quantidade").toString(), volume, finalMap, numNota.equals(register.get("quantidade").toString())));
-        codProdMap.put(true, valor -> validoCodProdTrue(codProd, finalMap, codProd.equals(register.get("codigo_produto").toString())));
+        valorBrutoMap.put(true, valor -> validoValorBrutoTrue(register.get("valor_bruto").toString(), valorBruto, finalMap));
+        valorTotalMap.put(true, valor -> validoValorTotalTrue(register.get("valor_total_produto").toString(), valorTotal, finalMap));
+        valorNotaMap.put(true, valor -> validoValorNotaTrue(register.get("valor_nota").toString(), valorNota, finalMap));
+        lojaOrigemMap.put(true, valor -> validoLojaOrigemTrue(register.get("loja_origem").toString(), lojaOrigem, finalMap));
+        dataMap.put(true, valor -> validoDataTrue(register.get("data_emissao").toString(), data, finalMap));
+        produtoMap.put(true, valor -> validoProdutoTrue(register.get("descricao_produto").toString(), produto, finalMap));
+        natOpMap.put(true, valor -> validoNatOpTrue(register.get("natureza_operacao").toString(), natOp, finalMap));
+        qtdDiasMap.put(true, valor -> validoQtdDiasTrue(register.get("qtd_dias").toString(), qtdDias, finalMap));
+        lojaDestMap.put(true, valor -> validolojaDestTrue(register.get("loja_destino").toString(), lojaDest, finalMap));
+        numNotaMap.put(true, valor -> validoNumNotaDestTrue(register.get("num_nota_fiscal").toString(), numNota, finalMap));
+        volumeMap.put(true, valor -> validoVolumeTrue(register.get("quantidade").toString(), volume, finalMap));
+        codProdMap.put(true, valor -> validoCodProdTrue(register.get("codigo_produto").toString(), codProd, finalMap));
 
-        op.add(valorBrutoMap);
-        op.add(valorTotalMap);
         op.add(valorNotaMap);
-        op.add(lojaOrigemMap);
+        op.add(valorTotalMap);
+        op.add(valorBrutoMap);
         op.add(dataMap);
-        op.add(produtoMap);
-        op.add(natOpMap);
         op.add(qtdDiasMap);
-        op.add(lojaDestMap);
-        op.add(numNotaMap);
         op.add(volumeMap);
+        op.add(numNotaMap);
         op.add(codProdMap);
+        op.add(lojaOrigemMap);
+        op.add(lojaDestMap);
+        op.add(natOpMap);
+        op.add(produtoMap);
     }
 }
