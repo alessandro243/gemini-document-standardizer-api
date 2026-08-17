@@ -1,19 +1,13 @@
 package dev.alex.standardizer.utils;
 
-import dev.alex.standardizer.TestMap;
 import dev.alex.standardizer.config.PromptProperties;
-import dev.alex.standardizer.web.dto.reportdtos.DivergenceDto;
 import dev.alex.standardizer.web.dto.reportdtos.StoreReportDto;
-import org.antlr.v4.runtime.tree.Tree;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-import java.util.function.Function;
-import java.util.stream.StreamSupport;
 
 public class FileExtractorUtil {
     public Boolean isEmptyLine(String line){
@@ -101,6 +95,7 @@ public class FileExtractorUtil {
         String line;
         boolean firstLine = true;
         StringBuilder resultado = new StringBuilder();
+        resultado.append("Valor da Nota,Valor Total Produto,Valor Bruto,Data de Emissão,Qtd Dias,Quantidade,N° Nota Fiscal,Código,Loja Origem,Loja Destino,Natureza,Descrição do Produto,Conciliado,Divergência").append("\n");
         Map<String, String> finalMap = new HashMap<>();
         ArrayList<String> columns = null;
 
@@ -150,19 +145,8 @@ public class FileExtractorUtil {
                 String volume = splitedLine.get(idxVol).trim();
                 String valorNota = splitedLine.get(idxValor).trim();
 
-                String monetaryValorBruto = vBruto.replaceAll("[^0-9,.]", "");
-                String cleanValorBruto = monetaryValorBruto.replaceAll("\\.(?=.*\\.)", "");
-
-                String monetaryTotalProd = totalProd.replaceAll("[^0-9,.]", "");
-                String cleanTotalProd = monetaryTotalProd.replaceAll("\\.(?=.*\\.)", "");
-
-                String monetaryValueNota = valorNota.replaceAll("[^0-9,.]", "");
-                String cleanValueNota = monetaryValueNota.replaceAll("\\.(?=.*\\.)", "");
-
                 if (!numNota.contains("-")){
                     numNota = numNota.replaceAll("(.+)(\\d)", "$1-$2");
-
-                    ///System.out.println("Entrei: " + numNota);
                 }
 
                 List<Map<String, Object>> bru = database.selectRowsReport(database, codProd, numNota);
@@ -173,14 +157,14 @@ public class FileExtractorUtil {
                 }
 
                 Map<String, Object> register = bru.get(0);
-                TestMap testMap = new TestMap();
-                testMap.buildFinalMap(register, cleanValorBruto, cleanTotalProd, cleanValueNota, lojaOrigem, data, produto, natOp, qtdDias, lojaDest, numNota, volume, codProd);
-                String retorno = testMap.processar().toString();
-                System.out.println(retorno);
+                DataUtils dataUtils = new DataUtils();
+                dataUtils.buildFinalMap(register, vBruto, totalProd, valorNota, lojaOrigem, data, produto, natOp, qtdDias, lojaDest, numNota, volume, codProd);
+                StringBuilder result = dataUtils.processar();
+                resultado.append(result);
+
             }
 
         }catch (IOException e){
-
         }
 
         return resultado;

@@ -1,18 +1,18 @@
-package dev.alex.standardizer;
-import dev.alex.standardizer.utils.DateUtils;
+package dev.alex.standardizer.utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
-public class TestMap {
+public class DataUtils {
     private final ArrayList<Map<Boolean, Consumer<String>>> op = new ArrayList<>();
     private Map<String, String> finalMap;
     boolean flag = true;
     private ArrayList<String> divergenceList = new ArrayList<>();
+    private StringBuilder stringBuilder = new StringBuilder();
 
-    public Map<String, String> processar() {
+    public StringBuilder processar() {
         for (Map<Boolean, Consumer<String>> mapa : op) {
             if (mapa.containsKey(true)) {
                 mapa.get(true).accept(null);
@@ -20,12 +20,17 @@ public class TestMap {
                 mapa.get(false).accept(null);
             }
         }
+
         if (!divergenceList.isEmpty()){
             finalMap.put("Conciliado", "Divergente");
             finalMap.put("Divergência", divergenceList.getFirst());
         }
+
+        stringBuilder.append(finalMap.get("Conciliado")).append(",");
+        stringBuilder.append(finalMap.get("Divergência"));
+        stringBuilder.append("\n");
         divergenceList.clear();
-        return finalMap;
+        return stringBuilder;
     }
 
     public void validoCodProdTrue(String register, String codProd_, Map<String, String> returnMap){
@@ -34,6 +39,7 @@ public class TestMap {
             divergenceList.add("Produto não encontrado: " + codProd);
         }
         returnMap.put("Código", codProd);
+        this.stringBuilder.append(codProd).append(",");
     }
 
     public void validoVolumeTrue(String register, String volume_, Map<String, String> returnMap){
@@ -42,6 +48,7 @@ public class TestMap {
             divergenceList.add("Quantidade: " + (Integer.parseInt(volume) - Integer.parseInt(register)));
         }
         returnMap.put("Quantidade", volume);
+        this.stringBuilder.append(volume).append(",");
     }
 
     public void validoNumNotaDestTrue(String register, String numNota, Map<String, String> returnMap){
@@ -49,6 +56,7 @@ public class TestMap {
             divergenceList.add("Nota divergente: " + numNota);
         }
         returnMap.put("N° Nota Fiscal", numNota);
+        this.stringBuilder.append(numNota).append(",");
     }
 
     public void validolojaDestTrue(String register,String lojaDest, Map<String, String> returnMap){
@@ -56,6 +64,7 @@ public class TestMap {
             divergenceList.add("Loja divergente: " + lojaDest);
         }
         returnMap.put("Loja Destino", lojaDest);
+        this.stringBuilder.append(lojaDest).append(",");
     }
 
     public void validoQtdDiasTrue(String register, String qtdDias, Map<String, String> returnMap){
@@ -63,6 +72,7 @@ public class TestMap {
             divergenceList.add(String.format("Quantidade: %.2f", (Double.parseDouble(qtdDias) - Double.parseDouble(register))));
         }
         returnMap.put("Qtd Dias", qtdDias);
+        this.stringBuilder.append(qtdDias).append(",");
     }
 
     public void validoNatOpTrue(String register, String natOp_, Map<String, String> returnMap){
@@ -72,6 +82,7 @@ public class TestMap {
             divergenceList.add("Natureza divergente: " + natOp);
         }
         returnMap.put("Natureza", natOp);
+        this.stringBuilder.append(natOp).append(",");
     }
 
     public void validoProdutoTrue(String register, String produto, Map<String, String> returnMap){
@@ -79,6 +90,7 @@ public class TestMap {
             divergenceList.add("Produto não encontrado: " + produto);
         }
         returnMap.put("Descrição do Produto", produto);
+        this.stringBuilder.append(produto).append(",");
     }
 
     public void validoDataTrue(String register_, String data_, Map<String, String> returnMap){
@@ -89,6 +101,7 @@ public class TestMap {
             divergenceList.add("Data divergente: " + data);
         }
         returnMap.put("Data de Emissão", data);
+        this.stringBuilder.append(data).append(",");
     }
 
     public void validoLojaOrigemTrue(String register, String lojaOrigem, Map<String, String> returnMap){
@@ -96,27 +109,38 @@ public class TestMap {
             divergenceList.add("Loja origem divergente: " + lojaOrigem);
         }
         returnMap.put("Loja Origem", lojaOrigem);
+        this.stringBuilder.append(lojaOrigem).append(",");
     }
 
-    public void validoValorBrutoTrue(String register, String valorBruto, Map<String, String> returnMap){
-        if (!valorBruto.equals(register)){
-            divergenceList.add(String.format("Valor unitário: R$ %.2f", (Double.parseDouble(valorBruto) - Double.parseDouble(register))));
+    public void validoValorBrutoTrue(String register, String valorBruto_, Map<String, String> returnMap){
+        String monetaryValue = valorBruto_.replaceAll("[^0-9,.]", "");
+        String cleanValue = monetaryValue.replaceAll("\\.(?=.*\\.)", "");
+
+        if (!cleanValue.equals(register)){
+            divergenceList.add(String.format("Valor unitário: R$ %.2f", (Double.parseDouble(cleanValue) - Double.parseDouble(register))));
         }
-        returnMap.put("Valor Bruto", valorBruto);
+        returnMap.put("Valor Bruto", cleanValue);
+        this.stringBuilder.append(cleanValue).append(",");
     }
 
-    public void validoValorTotalTrue(String register, String valorTotal, Map<String, String> returnMap){
-        if (!valorTotal.equals(register)){
-            divergenceList.add("Total Produto: R$" + (Double.parseDouble(valorTotal) - Double.parseDouble(register)));
+    public void validoValorTotalTrue(String register, String valorTotal_, Map<String, String> returnMap){
+        String monetaryValue = valorTotal_.replaceAll("[^0-9,.]", "");
+        String cleanValue = monetaryValue.replaceAll("\\.(?=.*\\.)", "");
+        if (!cleanValue.equals(register)){
+            divergenceList.add("Total Produto: R$" + (Double.parseDouble(cleanValue) - Double.parseDouble(register)));
         }
-        returnMap.put("Valor Total Produto", valorTotal);
+        returnMap.put("Valor Total Produto", cleanValue);
+        this.stringBuilder.append(cleanValue).append(",");
     }
 
-    public void validoValorNotaTrue(String register, String valorNota, Map<String, String> returnMap){
-        if (!valorNota.equals(register)){
-            divergenceList.add(String.format("Valor da nota: R$ %.2f", (Double.parseDouble(valorNota) - Double.parseDouble(register))));
+    public void validoValorNotaTrue(String register, String valorNota_, Map<String, String> returnMap){
+        String monetaryValue = valorNota_.replaceAll("[^0-9,.]", "");
+        String cleanValue = monetaryValue.replaceAll("\\.(?=.*\\.)", "");
+        if (!cleanValue.equals(register)){
+            divergenceList.add(String.format("Valor da nota: R$ %.2f", (Double.parseDouble(cleanValue) - Double.parseDouble(register))));
         }
-        returnMap.put("Valor da Nota", valorNota);
+        returnMap.put("Valor da Nota", cleanValue);
+        this.stringBuilder.append(cleanValue).append(",");
     }
 
     public void buildFinalMap(

@@ -1,7 +1,0 @@
-Feito:
-Desacoplamento de callGemini para poder usa-la em outras funções;
-End point para a nova função de parse;
-Função intermediária em service;
-
-Próximo episódio:
-Função de leitura do arquivo anexado na requisição.
