@@ -1,5 +1,6 @@
 package dev.alex.standardizer.utils;
 
+import dev.alex.standardizer.TestMap;
 import dev.alex.standardizer.config.PromptProperties;
 import dev.alex.standardizer.web.dto.reportdtos.DivergenceDto;
 import dev.alex.standardizer.web.dto.reportdtos.StoreReportDto;
@@ -11,6 +12,7 @@ import java.io.*;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.StreamSupport;
 
 public class FileExtractorUtil {
@@ -19,6 +21,15 @@ public class FileExtractorUtil {
             return true;
         }
         return false;
+    }
+
+    public String containMonetary(String line){
+        if (line.contains("R$")) {
+            line = line.replaceAll("(R\\$\\s?[\\d.]+),(\\d{2})", "$1.$2");
+            line = line.replaceAll(",", ";");
+            ///line = line.replace("R$ ", "");
+        }
+        return line;
     }
 
     public String separatorDetector(String reader){
@@ -80,6 +91,101 @@ public class FileExtractorUtil {
         return finalPrompt;
     }
 
+    public StringBuilder testando(ArrayList<String> splitedLine){
+        return new StringBuilder();
+    }
+
+    public StringBuilder parseRows(Map<String,String> geminiResponseMap, MultipartFile file, Db_Utils database){
+        int idxNota = 0, idxLoja = 0, idxVol = 0, idxValor = 0, idxData = 0, idxProd = 0, idxLojaDest = 0, idxNatOp = 0, idxQtdDias = 0, idxCodProd = 0, idxVBrut = 0, idxTotalProd = 0;
+        String reportId = geminiResponseMap.get("id_relatorio");
+        String line;
+        boolean firstLine = true;
+        StringBuilder resultado = new StringBuilder();
+        Map<String, String> finalMap = new HashMap<>();
+        ArrayList<String> columns = null;
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream(), StandardCharsets.UTF_8))){
+            while ((line = br.readLine()) != null){
+
+                if (isEmptyLine(line)){
+                    continue;
+                }
+
+                if (firstLine){
+
+                    String separator = separatorDetector(line);
+                    columns = removeQuotes(line, separator);
+
+                    idxLoja = columns.indexOf(geminiResponseMap.get("loja_origem"));
+                    idxLojaDest = columns.indexOf(geminiResponseMap.get("loja_destino"));
+                    idxData = columns.indexOf(geminiResponseMap.get("data"));
+                    idxNatOp = columns.indexOf(geminiResponseMap.get("natureza_operacao"));
+                    idxQtdDias = columns.indexOf(geminiResponseMap.get("qtd_dias"));
+                    idxVol = columns.indexOf(geminiResponseMap.get("volume"));
+                    idxCodProd = columns.indexOf(geminiResponseMap.get("codigo_produto"));
+                    idxProd = columns.indexOf(geminiResponseMap.get("produto"));
+                    idxVBrut = columns.indexOf(geminiResponseMap.get("valor_bruto"));
+                    idxTotalProd = columns.indexOf(geminiResponseMap.get("valor_total_produto"));
+                    idxValor = columns.indexOf(geminiResponseMap.get("valor_declarado"));
+                    idxNota = columns.indexOf(geminiResponseMap.get("nota_fiscal"));
+
+                    firstLine = false;
+                    continue;
+                }
+
+                line = containMonetary(line);
+                String separator = separatorDetector(line);
+                ArrayList<String> splitedLine = removeQuotes(line, separator);
+
+                String lojaOrigem = splitedLine.get(idxLoja).trim();
+                String data = splitedLine.get(idxData).trim();
+                String produto = splitedLine.get(idxProd).trim();
+                String codProd = splitedLine.get(idxCodProd).trim();
+                String natOp = splitedLine.get(idxNatOp).trim();
+                String vBruto = splitedLine.get(idxVBrut).trim();
+                String qtdDias = splitedLine.get(idxQtdDias).trim();
+                String totalProd = splitedLine.get(idxTotalProd).trim();
+                String lojaDest = splitedLine.get(idxLojaDest).trim();
+                String numNota = splitedLine.get(idxNota).trim();
+                String volume = splitedLine.get(idxVol).trim();
+                String valorNota = splitedLine.get(idxValor).trim();
+
+                String monetaryValorBruto = vBruto.replaceAll("[^0-9,.]", "");
+                String cleanValorBruto = monetaryValorBruto.replaceAll("\\.(?=.*\\.)", "");
+
+                String monetaryTotalProd = totalProd.replaceAll("[^0-9,.]", "");
+                String cleanTotalProd = monetaryTotalProd.replaceAll("\\.(?=.*\\.)", "");
+
+                String monetaryValueNota = valorNota.replaceAll("[^0-9,.]", "");
+                String cleanValueNota = monetaryValueNota.replaceAll("\\.(?=.*\\.)", "");
+
+                if (!numNota.contains("-")){
+                    numNota = numNota.replaceAll("(.+)(\\d)", "$1-$2");
+
+                    ///System.out.println("Entrei: " + numNota);
+                }
+
+                List<Map<String, Object>> bru = database.selectRowsReport(database, codProd, numNota);
+
+                if (bru.size() < 1){
+                    ///System.out.println("Vazio");
+                    continue;
+                }
+
+                Map<String, Object> register = bru.get(0);
+                TestMap testMap = new TestMap();
+                testMap.buildFinalMap(register, cleanValorBruto, cleanTotalProd, cleanValueNota, lojaOrigem, data, produto, natOp, qtdDias, lojaDest, numNota, volume, codProd);
+                String retorno = testMap.processar().toString();
+                System.out.println(retorno);
+            }
+
+        }catch (IOException e){
+
+        }
+
+        return resultado;
+    }
+
     public StringBuilder parseCsvContent(Map<String, String> geminiResponseMap, MultipartFile filePath, Db_Utils database) {
         Map<String, StoreReportDto> finalStoreReport = new HashMap<>();
         String line;
@@ -90,6 +196,7 @@ public class FileExtractorUtil {
         int volum2 = 0;
         BigDecimal big = BigDecimal.ZERO;
         try (BufferedReader br = new BufferedReader(new InputStreamReader(filePath.getInputStream(), StandardCharsets.UTF_8))) {
+
             while ((line = br.readLine()) != null) {
 
                 if (isEmptyLine(line)){
@@ -120,11 +227,7 @@ public class FileExtractorUtil {
                     continue;
                 }
 
-                if (line.contains("R$")) {
-                    line = line.replaceAll("(R\\$\\s?[\\d.]+),(\\d{2})", "$1.$2");
-                    line = line.replaceAll(",", ";");
-                    ///line = line.replace("R$ ", "");
-                }
+                line = containMonetary(line);
 
                 System.out.println(line);
                 String separator = separatorDetector(line);
@@ -162,7 +265,7 @@ public class FileExtractorUtil {
         } catch (IOException e) {
             System.out.println("Deu ruim!");
         }
-        List<Map<String, Object>> data = database.select(database, reportId);
+        List<Map<String, Object>> data = database.selectFinalReport(database, reportId);
         List<String > geminiValues = new ArrayList<>(geminiResponseMap.values());
         StringBuilder finalReport = makeDivergenceDto(data, finalStoreReport);
         return finalReport;

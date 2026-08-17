@@ -25,7 +25,7 @@ public class GeminiController {
 
     @PostMapping("/report-parser")
     public StringBuilder compareReportRows(@RequestParam("File") MultipartFile multipartFile) throws Exception{
-        return service.compareReportRows(new GeminiRequestDto(),multipartFile );
+        return service.compareReportRows(new GeminiRequestDto(), multipartFile );
     }
 
 }

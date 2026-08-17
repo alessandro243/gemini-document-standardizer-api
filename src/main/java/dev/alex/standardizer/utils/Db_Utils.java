@@ -13,9 +13,15 @@ public class Db_Utils {
     @Autowired
     private JdbcTemplate selector;
 
-    public List<Map<String, Object>> select(Db_Utils database, String report_id){
+    public List<Map<String, Object>> selectFinalReport(Db_Utils database, String report_id){
         String sql = "SELECT unidade_auditora, loja_origem, volume_total_pecas, valor_total_retido, atraso_medio_dias FROM inventario_consolidado where unidade_auditora like ?";
         System.out.println(report_id + "<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         return selector.queryForList(sql, "%" + report_id + "%");
+    }
+
+    public List<Map<String, Object>> selectRowsReport(Db_Utils database, String codProd, String notaFiscal){
+        String sql = "SELECT * FROM detalhes_notas_fiscais where num_nota_fiscal = ? and codigo_produto = ?";
+        //System.out.println("Nota fiscal: " + notaFiscal + "Código do produto: " + codProd + "<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
+        return selector.queryForList(sql, notaFiscal, codProd);
     }
 }

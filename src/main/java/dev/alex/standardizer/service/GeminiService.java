@@ -8,6 +8,7 @@ import dev.alex.standardizer.web.dto.reportdtos.StoreReportDto;
 import dev.alex.standardizer.web.dto.request.*;
 import dev.alex.standardizer.web.dto.response.GeminiResponseDto;
 
+import java.io.File;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +40,9 @@ public class GeminiService {
 
     public StringBuilder compareReportRows(GeminiRequestDto report ,MultipartFile multipartFile) throws Exception{
         GeminiResponseDto retorno = callGemini(report, multipartFile);
-        return new StringBuilder();
+        ObjectMapper jsonMapper = new ObjectMapper();
+        Map<String, String> columnMapping = jsonMapper.readValue(retorno.getCandidates().get(0).getContent().getParts().get(0).getText(), Map.class);
+        return fileExtractorUtil.parseRows(columnMapping, multipartFile, database);
     }
 
     public GeminiRequestDto requestConstructor(GeminiRequestDto geminiRequestDTO, MultipartFile file){
