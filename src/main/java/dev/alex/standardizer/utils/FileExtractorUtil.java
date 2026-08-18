@@ -21,8 +21,7 @@ public class FileExtractorUtil {
         if (line.contains("R$")) {
             line = line.replaceAll("(R\\$\\s?[\\d.]+),(\\d{2})", "$1.$2");
             line = line.replaceAll(",", ";");
-            ///line = line.replace("R$ ", "");
-        }
+            }
         return line;
     }
 
@@ -87,7 +86,6 @@ public class FileExtractorUtil {
 
     public StringBuilder parseRows(Map<String,String> geminiResponseMap, MultipartFile file, Db_Utils database){
         int idxNota = 0, idxLoja = 0, idxVol = 0, idxValor = 0, idxData = 0, idxProd = 0, idxLojaDest = 0, idxNatOp = 0, idxQtdDias = 0, idxCodProd = 0, idxVBrut = 0, idxTotalProd = 0;
-        String reportId = geminiResponseMap.get("id_relatorio");
         String line;
         boolean firstLine = true;
         StringBuilder resultado = new StringBuilder();
@@ -175,8 +173,8 @@ public class FileExtractorUtil {
         String reportId = geminiResponseMap.get("id_relatorio");
         int volum2 = 0;
         BigDecimal big = BigDecimal.ZERO;
-        try (BufferedReader br = new BufferedReader(new InputStreamReader(filePath.getInputStream(), StandardCharsets.UTF_8))) {
 
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(filePath.getInputStream(), StandardCharsets.UTF_8))) {
             while ((line = br.readLine()) != null) {
 
                 if (isEmptyLine(line)){
@@ -200,16 +198,11 @@ public class FileExtractorUtil {
                     idxQtdDias = columns.indexOf(geminiResponseMap.get("qtd_dias"));
                     idxTotalProd = columns.indexOf(geminiResponseMap.get("valor_total_produto"));
                     idxLojaDest = columns.indexOf(geminiResponseMap.get("loja_destino").trim());
-
-                    System.out.println(geminiResponseMap.get("valor_declarado").trim() + "&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-                    System.out.println(columns.get(idxValor) + "¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨¨");
                     firstLine = false;
                     continue;
                 }
 
                 line = containMonetary(line);
-
-                System.out.println(line);
                 String separator = separatorDetector(line);
                 ArrayList<String> columns = removeQuotes(line, separator);
 
@@ -234,7 +227,6 @@ public class FileExtractorUtil {
                 storeReportDto.increaseTotalPecas(volum);
 
                 if (!processedNotes.contains(numNota)) {
-                    System.out.println("entrei na nota: " + numNota);
                     storeReportDto.increaseTotalRetido(decimalValue);
                     processedNotes.add(numNota);
                 }else{
@@ -243,16 +235,13 @@ public class FileExtractorUtil {
             }
 
         } catch (IOException e) {
-            System.out.println("Deu ruim!");
         }
         List<Map<String, Object>> data = database.selectFinalReport(database, reportId);
-        List<String > geminiValues = new ArrayList<>(geminiResponseMap.values());
         StringBuilder finalReport = makeDivergenceDto(data, finalStoreReport);
         return finalReport;
     }
 
     public StringBuilder makeDivergenceDto(List<Map<String, Object>> data, Map<String, StoreReportDto> finalStore){
-        System.out.println(finalStore + "Finaaaaaaaaaaaaaaaaaaaaaaaaaal");
         List<LinkedHashMap<String, Object>> returnMap = new ArrayList<>();
         Map<String, String>  keys_ = new HashMap<>();
         Double valorTotal = 0.0;
@@ -316,9 +305,6 @@ public class FileExtractorUtil {
             System.out.println("valorTotal: " + valorTotal + "valorTotalBank: " + valorTotalBank);
         }
 
-        ///System.out.println(csv);
         return csv;
     }
 }
-///finalStoreReport: {Filial Batel (PR)=StoreReportDto(accumulatedVolume=188, accumulatedValue=3840.2), Megastore Jardins (SP)=StoreReportDto(accumulatedVolume=5, accumulatedValue=38.52), Filial Floripa (SC)=StoreReportDto(accumulatedVolume=137, accumulatedValue=541.82), Filial Copacabana (RJ)=StoreReportDto(accumulatedVolume=34, accumulatedValue=187.94)}FinalStore<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<,,,
-///meuHashMap, valores antés do cálculo de diferenças: {loja_origem=Filial Copacabana (RJ), valor_total_retido=187.94, atraso_medio_dias=28.0, unidade_auditora=Central Norte (Relatório II), volume_total_pecas=34}meuHashMap<<<<<<<<<<<<<<<<<<
