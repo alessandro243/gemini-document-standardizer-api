@@ -31,11 +31,11 @@ public class GeminiService {
     private FileExtractorUtil fileExtractorUtil = new FileExtractorUtil();
     private final Db_Utils database;
 
-    public StringBuilder parseAndProcessReport(GeminiRequestDto requestDTO, MultipartFile report) throws Exception{
-        GeminiResponseDto retorno = callGemini(requestDTO, report);
+    public StringBuilder parseAndProcessReport(GeminiRequestDto requestDTO, MultipartFile multipartFile) throws Exception{
+        GeminiResponseDto retorno = callGemini(requestDTO, multipartFile);
         ObjectMapper jsonMapper = new ObjectMapper();
         Map<String, String> columnMapping = jsonMapper.readValue(retorno.getCandidates().get(0).getContent().getParts().get(0).getText(), Map.class);
-        return fileExtractorUtil.parseCsvContent(columnMapping, report, database);
+        return fileExtractorUtil.parseCsvContent(columnMapping, multipartFile, database);
     }
 
     public StringBuilder compareReportRows(GeminiRequestDto report ,MultipartFile multipartFile) throws Exception{

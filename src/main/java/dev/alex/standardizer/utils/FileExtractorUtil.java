@@ -91,7 +91,7 @@ public class FileExtractorUtil {
         String line;
         boolean firstLine = true;
         StringBuilder resultado = new StringBuilder();
-        resultado.append("Valor da Nota,Valor Total Produto,Valor Bruto,Data de Emissão,Qtd Dias,Quantidade,N° Nota Fiscal,Código,Loja Origem,Loja Destino,Natureza,Descrição do Produto,Conciliado,Divergência").append("\n");
+        resultado.append("Valor Bruto,Valor Total Produto,Valor da Nota,Loja Origem,Data de Emissão,Descrição do Produto,Natureza,Qtd Dias,Loja Destino,N° Nota Fiscal,Quantidade,Código,Conciliado,Divergência").append("\n");
         Map<String, String> finalMap = new HashMap<>();
         ArrayList<String> columns = null;
 

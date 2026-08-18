@@ -20,7 +20,6 @@ public class Db_Utils {
 
     public List<Map<String, Object>> selectRowsReport(Db_Utils database, String codProd, String notaFiscal){
         String sql = "SELECT * FROM detalhes_notas_fiscais where num_nota_fiscal = ? and codigo_produto = ?";
-        //System.out.println("Nota fiscal: " + notaFiscal + "Código do produto: " + codProd + "<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
         return selector.queryForList(sql, notaFiscal, codProd);
     }
 }
