@@ -6,19 +6,14 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 public class DataUtils {
-    private final ArrayList<Map<Boolean, Consumer<String>>> op = new ArrayList<>();
+    private final ArrayList<Consumer<String>> op = new ArrayList<>();
     private Map<String, String> finalMap;
-    boolean flag = true;
     private ArrayList<String> divergenceList = new ArrayList<>();
     private StringBuilder stringBuilder = new StringBuilder();
 
     public StringBuilder processar() {
-        for (Map<Boolean, Consumer<String>> mapa : op) {
-            if (mapa.containsKey(true)) {
-                mapa.get(true).accept(null);
-            } else if (mapa.containsKey(false)) {
-                mapa.get(false).accept(null);
-            }
+        for (Consumer<String> function: op) {
+            function.accept(null);
         }
 
         if (!divergenceList.isEmpty()){
@@ -164,6 +159,7 @@ public class DataUtils {
         this.finalMap.put("Natureza", null);
         this.finalMap.put("Conciliado", "OK");
         this.finalMap.put("Divergência", "-");
+
         dataConfig(register, valorBruto, valorTotal, valorNota, lojaOrigem, data, produto, natOp, qtdDias, lojaDest, numNota, volume, codProd);
     }
 
@@ -173,43 +169,17 @@ public class DataUtils {
             String codProd
     )
     {
-        Map<Boolean, Consumer<String>> lojaDestMap = new HashMap<>();
-        Map<Boolean, Consumer<String>> volumeMap = new HashMap<>();
-        Map<Boolean, Consumer<String>> qtdDiasMap = new HashMap<>();
-        Map<Boolean, Consumer<String>> natOpMap = new HashMap<>();
-        Map<Boolean, Consumer<String>> produtoMap = new HashMap<>();
-        Map<Boolean, Consumer<String>> dataMap = new HashMap<>();
-        Map<Boolean, Consumer<String>> lojaOrigemMap = new HashMap<>();
-        Map<Boolean, Consumer<String>> valorBrutoMap = new HashMap<>();
-        Map<Boolean, Consumer<String>> valorTotalMap = new HashMap<>();
-        Map<Boolean, Consumer<String>> valorNotaMap = new HashMap<>();
-        Map<Boolean, Consumer<String>> numNotaMap = new HashMap<>();
-        Map<Boolean, Consumer<String>> codProdMap = new HashMap<>();
-
-        valorBrutoMap.put(true, valor -> validoValorBrutoTrue(register.get("valor_bruto").toString(), valorBruto, finalMap));
-        valorTotalMap.put(true, valor -> validoValorTotalTrue(register.get("valor_total_produto").toString(), valorTotal, finalMap));
-        valorNotaMap.put(true, valor -> validoValorNotaTrue(register.get("valor_nota").toString(), valorNota, finalMap));
-        lojaOrigemMap.put(true, valor -> validoLojaOrigemTrue(register.get("loja_origem").toString(), lojaOrigem, finalMap));
-        dataMap.put(true, valor -> validoDataTrue(register.get("data_emissao").toString(), data, finalMap));
-        produtoMap.put(true, valor -> validoProdutoTrue(register.get("descricao_produto").toString(), produto, finalMap));
-        natOpMap.put(true, valor -> validoNatOpTrue(register.get("natureza_operacao").toString(), natOp, finalMap));
-        qtdDiasMap.put(true, valor -> validoQtdDiasTrue(register.get("qtd_dias").toString(), qtdDias, finalMap));
-        lojaDestMap.put(true, valor -> validolojaDestTrue(register.get("loja_destino").toString(), lojaDest, finalMap));
-        numNotaMap.put(true, valor -> validoNumNotaDestTrue(register.get("num_nota_fiscal").toString(), numNota, finalMap));
-        volumeMap.put(true, valor -> validoVolumeTrue(register.get("quantidade").toString(), volume, finalMap));
-        codProdMap.put(true, valor -> validoCodProdTrue(register.get("codigo_produto").toString(), codProd, finalMap));
-
-        op.add(valorNotaMap);
-        op.add(valorTotalMap);
-        op.add(valorBrutoMap);
-        op.add(dataMap);
-        op.add(qtdDiasMap);
-        op.add(volumeMap);
-        op.add(numNotaMap);
-        op.add(codProdMap);
-        op.add(lojaOrigemMap);
-        op.add(lojaDestMap);
-        op.add(natOpMap);
-        op.add(produtoMap);
+        op.add(valor -> validoValorBrutoTrue(register.get("valor_bruto").toString(), valorBruto, finalMap));
+        op.add(valor -> validoValorTotalTrue(register.get("valor_total_produto").toString(), valorTotal, finalMap));
+        op.add(valor -> validoValorNotaTrue(register.get("valor_nota").toString(), valorNota, finalMap));
+        op.add(valor -> validoLojaOrigemTrue(register.get("loja_origem").toString(), lojaOrigem, finalMap));
+        op.add(valor -> validoDataTrue(register.get("data_emissao").toString(), data, finalMap));
+        op.add(valor -> validoProdutoTrue(register.get("descricao_produto").toString(), produto, finalMap));
+        op.add(valor -> validoNatOpTrue(register.get("natureza_operacao").toString(), natOp, finalMap));
+        op.add(valor -> validoQtdDiasTrue(register.get("qtd_dias").toString(), qtdDias, finalMap));
+        op.add(valor -> validolojaDestTrue(register.get("loja_destino").toString(), lojaDest, finalMap));
+        op.add(valor -> validoNumNotaDestTrue(register.get("num_nota_fiscal").toString(), numNota, finalMap));
+        op.add(valor -> validoVolumeTrue(register.get("quantidade").toString(), volume, finalMap));
+        op.add(valor -> validoCodProdTrue(register.get("codigo_produto").toString(), codProd, finalMap));
     }
 }

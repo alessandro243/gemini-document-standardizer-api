@@ -85,10 +85,6 @@ public class FileExtractorUtil {
         return finalPrompt;
     }
 
-    public StringBuilder testando(ArrayList<String> splitedLine){
-        return new StringBuilder();
-    }
-
     public StringBuilder parseRows(Map<String,String> geminiResponseMap, MultipartFile file, Db_Utils database){
         int idxNota = 0, idxLoja = 0, idxVol = 0, idxValor = 0, idxData = 0, idxProd = 0, idxLojaDest = 0, idxNatOp = 0, idxQtdDias = 0, idxCodProd = 0, idxVBrut = 0, idxTotalProd = 0;
         String reportId = geminiResponseMap.get("id_relatorio");
